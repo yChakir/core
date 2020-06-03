@@ -21,18 +21,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RequiredArgsConstructor
-public class BaseController<T extends BaseModel<ID>, D extends BaseDto<T, ID>, ID, S extends BaseService<T, ID, ?>> {
+public abstract class BaseController<T extends BaseModel<ID>, D extends BaseDto<T, ID>, ID, S extends BaseService<T, ID, ?>> {
 
   private final S service;
 
-  private final ModelMapper modelMapper;
+  protected abstract ModelMapper getMapper();
 
   @PostMapping
   public ResponseEntity save(@RequestBody D dto, Class<T> clazz) {
     try {
       final T object = clazz.newInstance();
 
-      modelMapper.map(dto, object);
+      getMapper().map(dto, object);
 
       service.save(object);
 
@@ -48,7 +48,7 @@ public class BaseController<T extends BaseModel<ID>, D extends BaseDto<T, ID>, I
     try {
       final T object = clazz.newInstance();
 
-      modelMapper.map(dto, object);
+      getMapper().map(dto, object);
 
       service.update(id, object);
 
@@ -63,7 +63,7 @@ public class BaseController<T extends BaseModel<ID>, D extends BaseDto<T, ID>, I
     try {
       final T object = clazz.newInstance();
 
-      modelMapper.map(dto, object);
+      getMapper().map(dto, object);
 
       service.patch(id, object);
 
@@ -80,7 +80,7 @@ public class BaseController<T extends BaseModel<ID>, D extends BaseDto<T, ID>, I
 
       final D dto = clazz.newInstance();
 
-      modelMapper.map(object, dto);
+      getMapper().map(object, dto);
 
       return ResponseEntity.ok(dto);
     } catch (Exception e) {
@@ -112,7 +112,7 @@ public class BaseController<T extends BaseModel<ID>, D extends BaseDto<T, ID>, I
       for (T object : objects) {
         final D dto = clazz.newInstance();
 
-        modelMapper.map(object, dto);
+        getMapper().map(object, dto);
 
         dtos.add(dto);
       }
@@ -133,7 +133,7 @@ public class BaseController<T extends BaseModel<ID>, D extends BaseDto<T, ID>, I
       for (T object : objects) {
         final D dto = clazz.newInstance();
 
-        modelMapper.map(object, dto);
+        getMapper().map(object, dto);
 
         dtos.and(dto);
       }
