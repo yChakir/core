@@ -5,13 +5,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import ma.tiwtiw.core.exception.ResourceNotFoundException;
+import ma.tiwtiw.core.model.BaseModel;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.util.StringUtils;
 
-public interface BaseService<T, ID, R extends MongoRepository<T, ID>> {
+public interface BaseService<T extends BaseModel<ID>, ID, R extends MongoRepository<T, ID>> {
 
   R getRepository();
 
