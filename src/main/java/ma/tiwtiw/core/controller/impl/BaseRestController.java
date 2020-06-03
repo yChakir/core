@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ma.tiwtiw.core.controller.BaseController;
 import ma.tiwtiw.core.dto.BaseDto;
 import ma.tiwtiw.core.exception.ServerException;
@@ -24,11 +25,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+@Slf4j
 @RequiredArgsConstructor
 public abstract class BaseRestController<T extends BaseModel<ID>, D extends BaseDto<T, ID>, ID, S extends BaseService<T, ID, ?>> implements
     BaseController<T, D, ID, S> {
 
   private final Class<T> tClass;
+
   private final Class<D> dClass;
 
   protected abstract S getService();
@@ -60,6 +63,7 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
       return ResponseEntity.created(location).build();
 
     } catch (Exception e) {
+      log.error(e.getMessage(), e);
       throw new ServerException(e);
     }
   }
@@ -76,6 +80,7 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
       return ResponseEntity.noContent().build();
     } catch (Exception e) {
+      log.error(e.getMessage(), e);
       throw new ServerException(e);
     }
   }
@@ -92,6 +97,7 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
       return ResponseEntity.noContent().build();
     } catch (Exception e) {
+      log.error(e.getMessage(), e);
       throw new ServerException(e);
     }
   }
@@ -108,6 +114,7 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
       return ResponseEntity.ok(dto);
     } catch (Exception e) {
+      log.error(e.getMessage(), e);
       throw new ServerException(e);
     }
   }
@@ -146,6 +153,7 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
       return ResponseEntity.ok(dtos);
     } catch (Exception e) {
+      log.error(e.getMessage(), e);
       throw new ServerException(e);
     }
   }
@@ -168,6 +176,7 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
       return ResponseEntity.ok(dtos);
     } catch (Exception e) {
+      log.error(e.getMessage(), e);
       throw new ServerException(e);
     }
   }
