@@ -2,7 +2,6 @@ package ma.tiwtiw.core.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import ma.tiwtiw.core.dto.BaseDto;
 import ma.tiwtiw.core.exception.ServerException;
 import ma.tiwtiw.core.model.BaseModel;
@@ -20,10 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@RequiredArgsConstructor
 public abstract class BaseController<T extends BaseModel<ID>, D extends BaseDto<T, ID>, ID, S extends BaseService<T, ID, ?>> {
 
-  private final S service;
+  protected abstract S getService();
 
   protected abstract ModelMapper getMapper();
 
@@ -34,7 +32,7 @@ public abstract class BaseController<T extends BaseModel<ID>, D extends BaseDto<
 
       getMapper().map(dto, object);
 
-      service.save(object);
+      getService().save(object);
 
       return ResponseEntity.created(null).build();
 
@@ -50,7 +48,7 @@ public abstract class BaseController<T extends BaseModel<ID>, D extends BaseDto<
 
       getMapper().map(dto, object);
 
-      service.update(id, object);
+      getService().update(id, object);
 
       return ResponseEntity.noContent().build();
     } catch (Exception e) {
@@ -65,7 +63,7 @@ public abstract class BaseController<T extends BaseModel<ID>, D extends BaseDto<
 
       getMapper().map(dto, object);
 
-      service.patch(id, object);
+      getService().patch(id, object);
 
       return ResponseEntity.noContent().build();
     } catch (Exception e) {
@@ -76,7 +74,7 @@ public abstract class BaseController<T extends BaseModel<ID>, D extends BaseDto<
   @GetMapping("{id}")
   public ResponseEntity findById(@PathVariable ID id, Class<D> clazz) {
     try {
-      final T object = service.findById(id);
+      final T object = getService().findById(id);
 
       final D dto = clazz.newInstance();
 
@@ -90,14 +88,14 @@ public abstract class BaseController<T extends BaseModel<ID>, D extends BaseDto<
 
   @GetMapping("{id}/exists")
   public ResponseEntity existsById(@PathVariable ID id) {
-    final boolean exists = service.existsById(id);
+    final boolean exists = getService().existsById(id);
 
     return ResponseEntity.ok(exists);
   }
 
   @DeleteMapping("{id}")
   public ResponseEntity deleteById(@PathVariable ID id) {
-    service.deleteById(id);
+    getService().deleteById(id);
 
     return ResponseEntity.noContent().build();
   }
@@ -105,7 +103,7 @@ public abstract class BaseController<T extends BaseModel<ID>, D extends BaseDto<
   @GetMapping
   public ResponseEntity findAll(Class<D> clazz) {
     try {
-      final List<T> objects = service.findAll();
+      final List<T> objects = getService().findAll();
 
       final List<D> dtos = new ArrayList<>();
 
@@ -126,7 +124,7 @@ public abstract class BaseController<T extends BaseModel<ID>, D extends BaseDto<
   @GetMapping("getPage")
   public ResponseEntity findAll(Pageable pageable, Class<D> clazz) {
     try {
-      final Page<T> objects = service.findAll(pageable);
+      final Page<T> objects = getService().findAll(pageable);
 
       final Page<D> dtos = new PageImpl<>(new ArrayList<>());
 
