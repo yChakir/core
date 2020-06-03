@@ -87,4 +87,8 @@ public interface BaseService<T extends BaseModel<ID>, ID, R extends MongoReposit
     return getRepository().findAll(pageable);
   }
 
+  default Long count() {
+    return getRepository().count();
+  }
+
 }

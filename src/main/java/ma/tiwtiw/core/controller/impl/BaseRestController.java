@@ -13,8 +13,8 @@ import ma.tiwtiw.core.model.BaseModel;
 import ma.tiwtiw.core.service.BaseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -164,17 +164,21 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
     try {
       final Page<T> objects = getService().findAll(pageable);
 
-      final Page<D> dtos = new PageImpl<>(new ArrayList<>());
+      final List<D> dtos = new ArrayList<>();
+
 
       for (T object : objects) {
         final D dto = newDtoInstance();
 
         getMapper().map(object, dto);
 
-        dtos.and(dto);
+        dtos.add(dto);
       }
 
-      return ResponseEntity.ok(dtos);
+      final Page<D> page = PageableExecutionUtils
+          .getPage(dtos, pageable, () -> getService().count());
+
+      return ResponseEntity.ok(page);
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       throw new ServerException(e);
