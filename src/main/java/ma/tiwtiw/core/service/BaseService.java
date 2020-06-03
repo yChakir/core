@@ -31,7 +31,7 @@ public interface BaseService<T extends BaseModel<ID>, ID, R extends MongoReposit
 
     final Class<?> clazz = object.getClass();
 
-    for (Field field : clazz.getFields()) {
+    for (Field field : clazz.getDeclaredFields()) {
       final Id isId = field.getAnnotation(Id.class);
 
       if (isId != null) {
