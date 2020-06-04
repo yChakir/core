@@ -7,7 +7,7 @@ import ma.tiwtiw.core.service.BaseService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
-public interface BaseController<T extends BaseModel<ID>, D extends BaseDto<T, ID>, ID, S extends BaseService<T, ID, ?>> {
+public interface BaseController<T extends BaseModel<ID>, D extends BaseDto<T, ID>, ID> {
 
   ResponseEntity save(D dto, HttpServletRequest request);
 

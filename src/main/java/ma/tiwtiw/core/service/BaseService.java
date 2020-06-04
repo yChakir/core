@@ -4,26 +4,25 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-import ma.tiwtiw.core.exception.ResourceNotFoundException;
 import ma.tiwtiw.core.model.BaseModel;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.util.StringUtils;
 
-public interface BaseService<T extends BaseModel<ID>, ID, R extends MongoRepository<T, ID>> {
+public interface BaseService<T extends BaseModel<ID>, ID> {
 
-  R getRepository();
+  T save(T object);
 
-  default T save(T object) {
-    return getRepository().save(object);
-  }
+  T update(ID id, T data)
+      throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
 
-  default T update(ID id, T data)
-      throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-    return update(id, data, false);
-  }
+  T patch(ID id, T data)
+      throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+
+  T findById(ID id);
+
+  boolean existsById(ID id);
 
   default T update(ID id, T data, boolean patch)
       throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
@@ -53,39 +52,24 @@ public interface BaseService<T extends BaseModel<ID>, ID, R extends MongoReposit
       }
     }
 
-    return getRepository().save(object);
+    return save(object);
   }
 
-  default T patch(ID id, T data)
-      throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-    return update(id, data, true);
-  }
+  void deleteById(ID id);
 
-  default T findById(ID id) {
-    return getRepository().findById(id)
-        .orElseThrow(ResourceNotFoundException::new);
-  }
+  void delete(T object);
 
-  default boolean existsById(ID id) {
-    return getRepository().existsById(id);
-  }
+  List<T> findAll();
 
-  default void deleteById(ID id) {
-    final T object = findById(id);
-    getRepository().delete(object);
-  }
+  Page<T> findAll(Pageable pageable);
 
-  default void delete(T object) {
-    getRepository().delete(object);
-  }
+  Long count();
 
   default List<T> findAll() {
     return getRepository().findAll();
   }
 
-  default Page<T> findAll(Pageable pageable) {
-    return getRepository().findAll(pageable);
-  }
+  Long count(T object);
 
   default Long count() {
     return getRepository().count();

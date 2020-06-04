@@ -27,14 +27,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Slf4j
 @RequiredArgsConstructor
-public abstract class BaseRestController<T extends BaseModel<ID>, D extends BaseDto<T, ID>, ID, S extends BaseService<T, ID, ?>> implements
-    BaseController<T, D, ID, S> {
+public abstract class BaseRestController<T extends BaseModel<ID>, D extends BaseDto<T, ID>, ID> implements
+    BaseController<T, D, ID> {
 
   private final Class<T> tClass;
 
   private final Class<D> dClass;
 
-  protected abstract S getService();
+  protected abstract <S extends BaseService<T, ID>> S getService();
 
   protected abstract ModelMapper getMapper();
 
@@ -56,14 +56,13 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
       getService().save(object);
 
-      URI location = ServletUriComponentsBuilder
+      final URI location = ServletUriComponentsBuilder
           .fromCurrentContextPath().path(request.getRequestURI() + "/{id}")
           .buildAndExpand(object.getId()).toUri();
 
       return ResponseEntity.created(location).build();
 
     } catch (Exception e) {
-      log.error(e.getMessage(), e);
       throw new ServerException(e);
     }
   }
@@ -80,7 +79,6 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
       return ResponseEntity.noContent().build();
     } catch (Exception e) {
-      log.error(e.getMessage(), e);
       throw new ServerException(e);
     }
   }
@@ -97,7 +95,6 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
       return ResponseEntity.noContent().build();
     } catch (Exception e) {
-      log.error(e.getMessage(), e);
       throw new ServerException(e);
     }
   }
@@ -114,7 +111,6 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
       return ResponseEntity.ok(dto);
     } catch (Exception e) {
-      log.error(e.getMessage(), e);
       throw new ServerException(e);
     }
   }
@@ -153,7 +149,6 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
       return ResponseEntity.ok(dtos);
     } catch (Exception e) {
-      log.error(e.getMessage(), e);
       throw new ServerException(e);
     }
   }
@@ -165,7 +160,6 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
       final Page<T> objects = getService().findAll(pageable);
 
       final List<D> dtos = new ArrayList<>();
-
 
       for (T object : objects) {
         final D dto = newDtoInstance();
@@ -180,7 +174,6 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
       return ResponseEntity.ok(page);
     } catch (Exception e) {
-      log.error(e.getMessage(), e);
       throw new ServerException(e);
     }
   }
