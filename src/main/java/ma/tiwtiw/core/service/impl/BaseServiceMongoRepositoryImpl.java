@@ -10,7 +10,6 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public abstract class BaseServiceMongoRepositoryImpl<T extends BaseModel<ID>, ID> implements
     BaseService<T, ID> {
@@ -75,7 +74,7 @@ public abstract class BaseServiceMongoRepositoryImpl<T extends BaseModel<ID>, ID
   @Override
   public Page<T> search(SearchQuery searchQuery, Pageable pageable) {
     // todo implement
-    throw new NotImplementedException();
+    throw new UnsupportedOperationException();
   }
 
   @Override
@@ -87,6 +86,6 @@ public abstract class BaseServiceMongoRepositoryImpl<T extends BaseModel<ID>, ID
   @Override
   public Long count(SearchQuery searchQuery) {
     // todo implement
-    throw new NotImplementedException();
+    throw new UnsupportedOperationException();
   }
 }
