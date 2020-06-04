@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import ma.tiwtiw.core.model.BaseModel;
+import ma.tiwtiw.core.model.SearchQuery;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,14 +66,9 @@ public interface BaseService<T extends BaseModel<ID>, ID> {
 
   Long count();
 
-  default List<T> findAll() {
-    return getRepository().findAll();
-  }
+  Page<T> search(SearchQuery searchQuery, Pageable pageable);
 
   Long count(T object);
 
-  default Long count() {
-    return getRepository().count();
-  }
-
+  Long count(SearchQuery searchQuery);
 }

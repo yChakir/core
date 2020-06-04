@@ -4,11 +4,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import ma.tiwtiw.core.exception.ResourceNotFoundException;
 import ma.tiwtiw.core.model.BaseModel;
+import ma.tiwtiw.core.model.SearchQuery;
 import ma.tiwtiw.core.service.BaseService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public abstract class BaseServiceMongoRepositoryImpl<T extends BaseModel<ID>, ID> implements
     BaseService<T, ID> {
@@ -71,8 +73,20 @@ public abstract class BaseServiceMongoRepositoryImpl<T extends BaseModel<ID>, ID
   }
 
   @Override
+  public Page<T> search(SearchQuery searchQuery, Pageable pageable) {
+    // todo implement
+    throw new NotImplementedException();
+  }
+
+  @Override
   public Long count(T object) {
     Example<T> example = Example.of(object);
     return getRepository().count(example);
+  }
+
+  @Override
+  public Long count(SearchQuery searchQuery) {
+    // todo implement
+    throw new NotImplementedException();
   }
 }

@@ -3,7 +3,7 @@ package ma.tiwtiw.core.controller;
 import javax.servlet.http.HttpServletRequest;
 import ma.tiwtiw.core.dto.BaseDto;
 import ma.tiwtiw.core.model.BaseModel;
-import ma.tiwtiw.core.service.BaseService;
+import ma.tiwtiw.core.model.SearchQuery;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
@@ -24,4 +24,6 @@ public interface BaseController<T extends BaseModel<ID>, D extends BaseDto<T, ID
   ResponseEntity findAll();
 
   ResponseEntity findAll(Pageable pageable);
+
+  ResponseEntity search(SearchQuery searchQuery, Pageable pageable);
 }

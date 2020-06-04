@@ -10,6 +10,7 @@ import ma.tiwtiw.core.controller.BaseController;
 import ma.tiwtiw.core.dto.BaseDto;
 import ma.tiwtiw.core.exception.ServerException;
 import ma.tiwtiw.core.model.BaseModel;
+import ma.tiwtiw.core.model.SearchQuery;
 import ma.tiwtiw.core.service.BaseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -171,6 +172,31 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
       final Page<D> page = PageableExecutionUtils
           .getPage(dtos, pageable, () -> getService().count());
+
+      return ResponseEntity.ok(page);
+    } catch (Exception e) {
+      throw new ServerException(e);
+    }
+  }
+
+  @Override
+  @GetMapping("search")
+  public ResponseEntity search(@RequestBody SearchQuery searchQuery, Pageable pageable) {
+    try {
+      final Page<T> objects = getService().search(searchQuery, pageable);
+
+      final List<D> dtos = new ArrayList<>();
+
+      for (T object : objects) {
+        final D dto = newDtoInstance();
+
+        getMapper().map(object, dto);
+
+        dtos.add(dto);
+      }
+
+      final Page<D> page = PageableExecutionUtils
+          .getPage(dtos, pageable, () -> getService().count(searchQuery));
 
       return ResponseEntity.ok(page);
     } catch (Exception e) {
