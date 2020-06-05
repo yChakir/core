@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public abstract class BaseServiceMongoRepositoryImpl<T extends BaseModel<ID>, ID> implements
+public abstract class BaseMongoRepositoryServiceImpl<T extends BaseModel<ID>, ID> implements
     BaseService<T, ID> {
 
 

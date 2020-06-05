@@ -180,7 +180,7 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
   }
 
   @Override
-  @GetMapping("search")
+  @PostMapping("search")
   public ResponseEntity search(@RequestBody SearchQuery searchQuery, Pageable pageable) {
     try {
       final Page<T> objects = getService().search(searchQuery, pageable);
