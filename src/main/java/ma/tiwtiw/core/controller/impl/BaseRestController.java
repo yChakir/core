@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.tiwtiw.core.controller.BaseController;
@@ -49,7 +50,7 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
   @Override
   @PostMapping
-  public ResponseEntity save(@RequestBody D dto, HttpServletRequest request) {
+  public ResponseEntity save(@Valid @RequestBody D dto, HttpServletRequest request) {
     try {
       final T object = newModelInstance();
 
@@ -70,7 +71,7 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
   @Override
   @PutMapping("{id}")
-  public ResponseEntity update(@PathVariable ID id, @RequestBody D dto) {
+  public ResponseEntity update(@PathVariable ID id, @Valid @RequestBody D dto) {
     try {
       final T object = newModelInstance();
 
@@ -86,7 +87,7 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
   @Override
   @PatchMapping("{id}")
-  public ResponseEntity patch(@PathVariable ID id, @RequestBody D dto) {
+  public ResponseEntity patch(@PathVariable ID id, @Valid @RequestBody D dto) {
     try {
       final T object = newModelInstance();
 
@@ -181,7 +182,7 @@ public abstract class BaseRestController<T extends BaseModel<ID>, D extends Base
 
   @Override
   @PostMapping("search")
-  public ResponseEntity search(@RequestBody SearchQuery searchQuery, Pageable pageable) {
+  public ResponseEntity search(@Valid @RequestBody SearchQuery searchQuery, Pageable pageable) {
     try {
       final Page<T> objects = getService().search(searchQuery, pageable);
 
