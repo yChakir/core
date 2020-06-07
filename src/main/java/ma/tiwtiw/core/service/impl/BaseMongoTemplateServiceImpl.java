@@ -27,6 +27,9 @@ public abstract class BaseMongoTemplateServiceImpl<T extends BaseModel<ID>, ID> 
 
   @Override
   public T save(T object) {
+    if (object.getId() != null) {
+      throw new UnsupportedOperationException();
+    }
     return getMongoTemplate().save(object);
   }
 

@@ -19,6 +19,9 @@ public abstract class BaseMongoRepositoryServiceImpl<T extends BaseModel<ID>, ID
 
   @Override
   public T save(T object) {
+    if (object.getId() != null) {
+      throw new UnsupportedOperationException();
+    }
     return getRepository().save(object);
   }
 
