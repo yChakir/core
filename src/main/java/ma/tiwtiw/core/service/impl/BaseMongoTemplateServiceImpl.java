@@ -27,9 +27,6 @@ public abstract class BaseMongoTemplateServiceImpl<T extends BaseModel<ID>, ID> 
 
   @Override
   public T save(T object) {
-    if (object.getId() != null) {
-      throw new UnsupportedOperationException();
-    }
     return getMongoTemplate().save(object);
   }
 
@@ -150,7 +147,7 @@ public abstract class BaseMongoTemplateServiceImpl<T extends BaseModel<ID>, ID> 
           criteria.and(searchCriteria.getField()).exists((Boolean) searchCriteria.getValue());
           break;
         case REGEX:
-          criteria.and(searchCriteria.getField()).regex(String.valueOf(searchCriteria.getValue()));
+          criteria.and(searchCriteria.getField()).regex(String.valueOf(searchCriteria.getValue()), searchCriteria.getOptions());
           break;
       }
     });

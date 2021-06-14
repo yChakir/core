@@ -13,5 +13,6 @@ public class SearchCriteria {
 
   private String field;
   private Object value;
+  private String options;
   private SearchOperator operator;
 }
